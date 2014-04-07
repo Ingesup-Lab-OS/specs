@@ -1,0 +1,37 @@
+digraph stack {
+    subgraph cluster_0 {
+        label="heat";
+        heat;
+        instance;
+        provisioning;
+        report;
+    }
+
+    subgraph cluster_1 {
+        label="cloud_init";
+        loading;
+        gitclone;
+        configure;
+    }
+
+    subgraph cluster_2 {
+        label="puppet";
+        ppapply[label="Standalone Puppet"];
+    }
+
+    subgraph cluster_3 {
+        label="github";
+        templates[label="os-lend-templates"];
+    }
+
+    heat -> instance[label="Démarre"]
+    instance -> provisioning[label="user_data heat (cloud_config)"];
+    provisioning -> loading[label="Démarre cloud_init"];
+    loading -> gitclone[label="Récupère les sources depuis github"];
+    gitclone -> templates;
+    templates -> gitclone;
+    gitclone -> configure[label="Applique la configuration"];
+    configure -> ppapply[label="puppet apply"];
+    configure -> report[label="Configuration terminée"];
+    report -> API[label="Remonte les metadata pour l'API"]
+}
