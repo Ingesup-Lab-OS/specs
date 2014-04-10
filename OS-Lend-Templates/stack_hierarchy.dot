@@ -2,29 +2,32 @@ digraph stack {
     subgraph cluster_0 {
         label="heat";
         heat;
+    }
+    subgraph cluster_1 {
+        label="nova";
         instance;
         provisioning;
-        report;
     }
 
-    subgraph cluster_1 {
+    subgraph cluster_2 {
         label="cloud_init";
         loading;
         gitclone;
         configure;
     }
 
-    subgraph cluster_2 {
+    subgraph cluster_3 {
         label="puppet";
         ppapply[label="Standalone Puppet"];
     }
 
-    subgraph cluster_3 {
+    subgraph cluster_4 {
         label="github";
         templates[label="os-lend-templates"];
     }
 
-    heat -> instance[label="Démarre"]
+    API -> heat;
+    heat -> instance[label="Démarre"];
     instance -> provisioning[label="user_data heat (cloud_config)"];
     provisioning -> loading[label="Démarre cloud_init"];
     loading -> gitclone[label="Récupère les sources depuis github"];
